@@ -1,0 +1,5 @@
+--challenge 176: Write a SQL query to get the second highest salary from the Employee table.
+
+select max(salary) as SecondHighestSalary
+from Employee
+where salary not in (select max(salary) from Employee)
