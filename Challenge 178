@@ -1,0 +1,32 @@
+--challenge 178: MySQL
+
+Select Score, Rank
+From
+    (Select  Id
+            ,Score
+            ,CAST((@rnk := if(@scr <> convert((@scr := Score),char) , @rnk+1, @rnk)) AS SIGNED) as Rank
+     From 
+         ( Select * 
+           From Scores
+           Order by Score desc, Id
+         ) a,
+         (select @rnk := 0, @scr := ' ') var
+    
+    ) b;
+    
+    
+--challenge 178: MS SQL
+   
+select 
+    Score,
+    dense_rank() over (order by Score desc) as Rank
+From 
+    Scores
+
+--challenge 178: Oracle
+
+select 
+    round(Score,2) as "Score",
+    dense_rank() over (order by Score desc) as "Rank"
+From 
+    Scores
