@@ -1,0 +1,15 @@
+--challenge 177:
+
+CREATE FUNCTION getNthHighestSalary(@N INT) RETURNS INT AS
+BEGIN
+    RETURN (
+        /* Write your T-SQL query statement below. */
+        
+          select distinct Salary
+          from 
+           (select dense_rank() over (order by salary desc) as Ranks, ID, Salary
+            from Employee) as a
+            --order by Ranks Desc) as a
+          where a.Ranks = @N
+    );
+END
