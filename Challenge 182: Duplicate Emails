@@ -1,0 +1,8 @@
+-- MS SQL
+
+select distinct Email
+from
+    Person p1
+where p1.Email = (select distinct Email 
+                  from Person
+                  where Email = p1.Email and id <> p1.Id)
