@@ -1,0 +1,9 @@
+--MYSQL
+
+select d.Name as Department, e.Name as Employee, Salary
+from Department d join Employee e on e.DepartmentId = d.Id
+where (d.Name, Salary) in (
+select d.Name, Max(Salary) 
+from Department d join Employee e on e.DepartmentId = d.Id
+group by d.Name)
+order by Salary desc
