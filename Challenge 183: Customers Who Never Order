@@ -1,0 +1,5 @@
+MS SQL
+
+select Name as Customers
+from Customers c left join Orders o on o.CustomerId = c.Id
+where o.id is null
