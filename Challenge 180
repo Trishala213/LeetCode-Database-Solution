@@ -1,0 +1,20 @@
+
+--MS SQL
+
+with ConsecNum1 as
+(
+    select Id,
+           Num,
+           Case 
+             when Lag(Num) over (order by Id asc) - Num = 0 then 0
+             else 1
+           End as flag1 
+    from Logs
+)
+select distinct Num as ConsecutiveNums
+From(
+select Num, sum(flag1) over (order by Id asc) as sum_over
+From ConsecNum1
+) as a
+group by a.Num, a.sum_over
+having count(a.sum_over) >=3
