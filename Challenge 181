@@ -2,6 +2,6 @@
 
 select e.Name as Employee
 from 
-    Employee e left join Employee m 
+    Employee e left join Employee m -- left join can increase the speed
     on e.ManagerId = m.Id 
 where e.Salary > m.Salary
