@@ -1,0 +1,9 @@
+MS SQL
+
+select d.Name as Department, e.Name as Employee, Salary
+from Employee e join Department d on e.DepartmentId = d.Id
+where Salary in (select distinct Top 3 Salary 
+                 from Employee
+                 where DepartmentId = e.DepartmentId
+                 order by Salary Desc)
+order by d.Name, Salary Desc
