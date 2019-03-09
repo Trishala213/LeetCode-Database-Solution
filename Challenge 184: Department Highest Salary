@@ -7,3 +7,13 @@ select d.Name, Max(Salary)
 from Department d join Employee e on e.DepartmentId = d.Id
 group by d.Name)
 order by Salary desc
+
+--MS SQL
+
+select d.Name as Department, e.Name as Employee, Salary
+from Department d join Employee e on e.DepartmentId = d.Id
+where Salary in (
+select Max(Salary) 
+from Employee 
+where DepartmentId = d.Id)
+order by Salary desc
