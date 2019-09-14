@@ -1,0 +1,13 @@
+/*Write a sql to find the name of the winning candidate, the above example will return the winner B */
+
+With CTE_Vote as
+(
+select CandidateId, count(id) as 'Total_votes'
+from Vote
+group by CandidateId)
+select Name
+from Candidate
+where id in (select Candidateid 
+            from CTE_vote 
+            where Total_votes = (select max(Total_votes) 
+                                 from CTE_Vote))
