@@ -1,0 +1,15 @@
+/*A university uses 2 data tables, student and department, to store data about its students and the departments associated 
+with each major.Write a query to print the respective department name and number of students majoring in each department 
+for all departments in the department table (even ones with no current students).Sort your results by descending number of students; 
+if two or more departments have the same number of students, then sort those departments alphabetically by department name.*/
+
+
+select dept_name,
+       coalesce(std_num,0) as 'student_number'
+from 
+(select dept_id,
+        count(student_id) as 'std_num'
+from student
+group by dept_id) a 
+right join department d on a.dept_id = d.dept_id
+order by student_number desc, dept_name asc
