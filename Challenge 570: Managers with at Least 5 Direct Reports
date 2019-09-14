@@ -1,0 +1,9 @@
+Given the Employee table, write a SQL query that finds out managers with at least 5 direct report. 
+
+select Name 
+from Employee
+where Id in (
+select ManagerId
+from Employee
+group by ManagerId
+having count(ID) > = 5)
