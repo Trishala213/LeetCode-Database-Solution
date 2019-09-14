@@ -1,0 +1,19 @@
+/*Query the customer_number from the orders table for the customer who has placed the largest number of orders.
+
+It is guaranteed that exactly one customer will have placed more orders than any other customer.*/
+
+select top 1 customer_number
+from orders
+group by customer_number
+order by count(order_number) desc
+
+What if more than one customer have the largest number of orders, can you find all the customer_number in this case?
+
+with cte_order as
+(select
+        customer_number,
+        count(order_number) over (partition by customer_number) as 'total_orders'
+from orders
+)select distinct customer_number
+from cte_order
+where total_orders = (select max(total_orders) from cte_order)
