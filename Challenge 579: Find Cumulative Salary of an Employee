@@ -1,0 +1,14 @@
+/*The Employee table holds the salary information in a year.*/
+
+select Id,
+       Month,
+       Salary
+from
+(
+select Id,
+       Month,
+       sum(Salary) over (partition by Id order by Month asc) as 'Salary',
+       dense_rank() over (partition by Id order by month desc) as 'month_rank'
+from Employee ) a
+where month_rank != 1
+order by Id asc, Month desc
