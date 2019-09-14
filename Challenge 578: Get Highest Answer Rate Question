@@ -1,0 +1,21 @@
+/*Write a sql query to identify the question which has the highest answer rate. */
+
+With CTE_survey as
+(select question_id,
+        cast(sum(
+           case when action = 'answer' 
+           then 1 
+           else 0
+           end) as decimal(10,2))as 'num_ans',
+        cast(sum(
+           case when action = 'show'
+           then 1
+           else 0
+           end) as decimal(10,2)) as 'num_show'
+from survey_log
+group by question_id
+)
+select question_id as survey_log
+from CTE_survey
+where (num_ans/num_show) = (select max(num_ans/num_show) 
+                            from CTE_survey)
