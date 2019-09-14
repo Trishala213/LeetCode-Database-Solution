@@ -1,0 +1,36 @@
+/*Write an SQL query that reports the fraction of players that logged in again on the day after the day they first logged in, 
+rounded to 2 decimal places. In other words, you need to count the number of players that logged in for at least two consecutive 
+days starting from their first login date, then divide that number by the total number of players.*/
+
+select cast((Player_logged_back / total_count_of_players) as decimal(10,2)) as 'fraction'
+from
+(select cast(count(distinct player_id) as decimal(10,2)) as 'Player_logged_back'
+ from
+     (select *,
+             lead(event_date,1) over (partition by player_id order by event_date asc) as 'next_date',
+             row_number() over (partition by player_id order by event_date asc) as 'rank'
+      from Activity) a
+ where dateadd(day, 1, event_date) = next_date and rank = 1) b,
+(select cast(count(distinct player_id) as decimal(10,2)) as 'total_count_of_players' 
+ from Activity) c
+ 
+ or 
+ 
+With CTE_Activity as 
+(select player_id,
+        event_date,
+        lead(event_date, 1) over (partition by player_id order by event_date) as 'next_date',
+        row_number() over (partition by player_id order by event_date) as 'rank'
+from Activity
+)
+select
+  round(
+         cast(
+              sum(case when dateadd(day, 1, event_date) = next_login 
+                 then 1 
+                 else 0 
+                 end) as float) 
+      / count(distinct player_id), 2
+  ) as fraction
+from tmp
+where rank = 1
