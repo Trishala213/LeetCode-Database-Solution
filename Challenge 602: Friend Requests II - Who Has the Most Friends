@@ -1,0 +1,24 @@
+/* Write a query to find the the people who has most friends and the most friends number. */
+
+with CTE_FriendReq as
+(
+select a.requester_id as 'id', 
+       coalesce(total_accepted,0) + coalesce(total_requested,0) as 'num'
+from 
+(select distinct requester_id
+ from request_accepted) a
+ left join
+ (select requester_id,
+         coalesce(count(accepter_id),0) as 'total_accepted'
+  from request_accepted
+  group by requester_id
+ ) b on a.requester_id = b.requester_id
+ left join
+ (select accepter_id,
+         coalesce(count(accepter_id),0) as 'total_requested'
+  from request_accepted
+  group by accepter_id
+ ) c on c.accepter_id = a.requester_id
+) select id, num
+from CTE_FriendReq
+where num = (select max(num) from CTE_FriendReq)
