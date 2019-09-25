@@ -1,0 +1,8 @@
+/* Please write a sql query to get the amount of each follower’s follower if he/she has one. */
+
+select followee as 'follower',
+       count(distinct upper(cast(followee as varchar(10)))+upper(cast(follower as varchar(10)))) as 'num'
+from follow
+where followee in (select distinct follower from follow)
+group by followee
+order by followee
