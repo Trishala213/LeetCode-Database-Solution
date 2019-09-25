@@ -1,0 +1,10 @@
+/* Write your T-SQL query statement below */
+
+select seat_id
+from
+(select seat_id,
+       free,
+       coalesce(lag(free) over (order by seat_id asc),0) as 'prev_free',
+       coalesce(lead(free) over (order by seat_id asc),0) as 'next_free'
+from cinema) a
+where free + next_free = 2
