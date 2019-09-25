@@ -1,0 +1,11 @@
+/*Write an SQL query for a report that provides the customer ids from the Customer 
+table that bought all the products in the Product table. */
+
+select customer_id
+       --,count(distinct product_key) as 'distinct_num_prod'
+from Customer
+group by customer_id
+having count(distinct product_key) = (select count(distinct product_key) from Product)
+
+/* the idea is that all the if I count the distinct products bought by a customer, it should match the distinct number of products in the 
+product table */
