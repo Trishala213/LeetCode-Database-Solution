@@ -1,0 +1,13 @@
+/* Write an SQL query that reports all the projects that have the most employees. */
+
+select project_id
+from
+(select *,
+       dense_rank() over (order by total_employee desc) as rank
+ from 
+     (select project_id,
+             count(employee_id) as 'total_employee'
+      from Project
+      group by project_id) a 
+ ) b
+ where rank = 1
