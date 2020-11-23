@@ -1,0 +1,26 @@
+select  s1.sale_date
+       ,s1.sold_num - s2.sold_num as 'diff'
+from Sales s1 join sales s2 on (s1.sale_date = s2.sale_date and s1.fruit != s2.fruit)
+where s1.fruit != 'oranges'
+
+----------------------------------------------------------------------------------------
+
+better than before
+
+select   A.sale_date
+        ,app_num - org_num as 'diff'
+from 
+(select  sale_date
+        ,fruit
+        ,sold_num as 'app_num'
+from Sales
+where fruit = 'apples'
+) as A
+JOIN
+(select  sale_date
+        ,fruit
+        ,sold_num as 'org_num'
+from Sales
+where fruit = 'oranges'
+) as B
+on A.sale_date = B.sale_date
