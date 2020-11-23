@@ -1,0 +1,29 @@
+with cte_stocks as 
+(select  *
+       , case 
+         when operation = 'Buy'
+         then -1*(price)
+         else price
+         end as 'CreDeb'
+from Stocks
+)
+select  stock_name
+       ,sum(CreDeb) as capital_gain_loss
+from cte_stocks
+group by stock_name
+
+---------------------------------------------------------
+Subquery with better performance:
+
+select  stock_name
+       ,sum(CreDeb) as capital_gain_loss
+from 
+(select  *
+       , case 
+         when operation = 'Buy'
+         then -1*(price)
+         else price
+         end as 'CreDeb'
+from Stocks
+) as A
+group by stock_name
