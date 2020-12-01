@@ -1,0 +1,16 @@
+
+with cte_order 
+as
+(select customer_id
+       ,order_id
+       ,order_date
+       ,dense_rank() over (partition by customer_id order by order_date desc) as rn
+from orders
+)
+select  name as customer_name
+       ,cc.customer_id
+       ,cc.order_id
+       ,cc.order_date
+from cte_order cc join customers c on cc.customer_id = c.customer_id
+where rn<=3
+order by name asc, cc.customer_id asc, order_date desc
